@@ -24,15 +24,14 @@ vicious.register(mem_bar, vicious.widgets.mem,
                     mem_tip.text = " RAM: " .. usage
                     mem_bar.widget.value = args[1]
                  end, 2)
-mem_label = wibox.widget {
-   markup = '<span size="small">RAM</span>',
-   align = "center",
-   valign = "top",
-   widget = wibox.widget.textbox,
-}
 
 memory_widget = wibox.widget {
    mem_bar,
-   mem_label,
+   {
+      markup = '<span size="small">RAM</span>',
+      align = "center",
+      valign = "top",
+      widget = wibox.widget.textbox,
+   },
    widget = wibox.layout.stack
 }
