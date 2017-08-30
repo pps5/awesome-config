@@ -554,7 +554,7 @@ awful.rules.rules = {
       properties = { tag = " doc " }
     },
     { rule = { class = "Gimp-2.8" },
-      properties = { tag = "  float  " }
+      properties = { tag = " float " }
     },
     { rule = { instance = "LINE.exe" },
       properties = { tag = " comm " }
