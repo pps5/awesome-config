@@ -343,19 +343,6 @@ globalkeys = gears.table.join(
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"}),
-    -- -- sound
-    -- awful.key({}, "XF86AudioRaiseVolume",
-    --    function()
-    --       awful.util.spawn_with_shell("amixer sset Master 3%+")
-    -- end),
-    -- awful.key({}, "XF86AudioLowerVolume",
-    --    function()
-    --       awful.util.spawn_with_shell("amixer sset Master 3%-")
-    -- end),
-    -- awful.key({}, "XF86AudioMute",
-    --    function()
-    --       awful.util.spawn_with_shell("sh /home/inab/.config/awesome/mute.sh")
-    -- end),
 
     -- toggle fullscreen
     awful.key({ modkey }, "F11",
