@@ -621,6 +621,7 @@ run_once("xss-lock -- xscreensaver-command -lock")
 run_once("synclient TouchpadOff=1")
 run_once("shutter")
 run_once("volumeicon")
+run_once("blueman-applet")
 awful.util.spawn_with_shell("xset b off")
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
