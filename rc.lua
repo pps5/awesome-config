@@ -373,7 +373,7 @@ globalkeys = gears.table.join(
     -- screenshots
     awful.key({ "Shift" }, "Print",
        function()
-          awful.util.spawn_with_shell("shutter -f")
+          awful.util.spawn_with_shell("deepin-screenshot")
     end)
 )
 
