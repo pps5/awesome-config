@@ -546,6 +546,12 @@ awful.rules.rules = {
     { rule = { instance = "LINE.exe" },
       properties = { tag = " comm " }
     },
+    { rule = { class = "Steam" },
+      properties = { tag = " float "}
+    },
+    { rule = { class = "factorio" },
+      properties = { tag = " float "}
+    },
 }
 -- }}}
 
@@ -621,6 +627,7 @@ run_once("xss-lock -- xscreensaver-command -lock")
 run_once("synclient TouchpadOff=1")
 run_once("shutter")
 run_once("volumeicon")
+run_once("steam-native -silent")
 run_once("blueman-applet")
 awful.util.spawn_with_shell("xset b off")
 
