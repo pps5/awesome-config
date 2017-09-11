@@ -344,16 +344,6 @@ globalkeys = gears.table.join(
     -- awful.key({ modkey }, "p", function() menubar.show() end,
     --           {description = "show the menubar", group = "launcher"}),
 
-    -- toggle fullscreen
-    awful.key({ modkey }, "F11",
-       function()
-          if awful.layout.get() == awful.layout.suit.max.fullscreen then
-             awful.layout.set(awful.layout.suit.tile)
-          else
-             awful.layout.set(awful.layout.suit.max.fullscreen)
-          end
-       end, {description = "toggle fullscreen", group = "layout"}),
-
     -- brightness
     awful.key({}, "XF86MonBrightnessUp",
        function()
