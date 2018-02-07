@@ -14,6 +14,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 require("awesome-wm-widgets.battery-widget.battery")
+require("awesome-wm-widgets.volume-widget.volume")
 
 require("widgets.memory-widget")
 require("widgets.cpu.usage")
@@ -69,7 +70,7 @@ awful.layout.layouts = {
     -- awful.layout.suit.tile.left,
     -- awful.layout.suit.tile.bottom,
     awful.layout.suit.tile.top,
-    -- awful.layout.suit.fair,
+    awful.layout.suit.fair,
     -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
@@ -190,7 +191,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ " main ", " work ", " web ", " doc ", " comm "}, s, awful.layout.layouts[2])
+    awful.tag({ " term ", " edit ", " web ", " doc ", " comm "}, s, awful.layout.layouts[4])
     awful.tag.add(" float ", { screen = s, layout = awful.layout.layouts[1] })
 
     -- Create a promptbox for each screen
@@ -230,6 +231,7 @@ awful.screen.connect_for_each_screen(function(s)
            wibox.widget.systray(),
            mytextclock,
            battery_widget,
+           volume_widget,
            s.mylayoutbox,
         },
     }
@@ -344,14 +346,20 @@ globalkeys = gears.table.join(
     -- awful.key({ modkey }, "p", function() menubar.show() end,
     --           {description = "show the menubar", group = "launcher"}),
 
+    -- CapsLock
+    awful.key({"Shift"}, "#101",
+       function()
+          awful.util.spawn_with_shell("xdotool key Caps_Lock")
+    end),
+
     -- brightness
     awful.key({}, "XF86MonBrightnessUp",
        function()
-          awful.util.spawn_with_shell("xbacklight -inc 8")
+          awful.util.spawn_with_shell("light -A 5")
     end),
     awful.key({}, "XF86MonBrightnessDown",
        function()
-          awful.util.spawn_with_shell("xbacklight -dec 8")
+          awful.util.spawn_with_shell("light -U 5")
     end),
 
     -- Lock screen
@@ -364,7 +372,25 @@ globalkeys = gears.table.join(
     awful.key({ "Shift" }, "Print",
        function()
           awful.util.spawn_with_shell("deepin-screenshot")
-    end)
+    end),
+
+    -- volume
+    awful.key({}, "XF86AudioRaiseVolume",
+       function()
+          awful.util.spawn_with_shell("amixer sset Master 5%+")
+          awful.util.spawn_with_shell("/home/inab/.config/awesome/volume.sh")
+    end),
+    awful.key({}, "XF86AudioLowerVolume",
+       function()
+          awful.util.spawn_with_shell("amixer sset Master 5%-")
+          awful.util.spawn_with_shell("/home/inab/.config/awesome/volume.sh")    end),
+    awful.key({}, "XF86AudioMute",
+       function()
+          awful.util.spawn_with_shell("amixer sset Master toggle")
+          awful.util.spawn_with_shell("/home/inab/.config/awesome/volume.sh")    end),
+    awful.key({ "Control" }, "Home",
+       function()
+          awful.util.spawn_with_shell("/home/inab/.config/awesome/touchpad.sh")    end)
 )
 
 clientkeys = gears.table.join(
@@ -522,6 +548,9 @@ awful.rules.rules = {
     { rule = { class = "Chromium" },
       properties = { tag = " web " }
     },
+    { rule = { class = "Firefox" },
+      properties = { tag = " web " }
+    },
     { rule = { class = "Vivaldi-stable" },
       properties = { tag = " web " }
     },
@@ -535,6 +564,9 @@ awful.rules.rules = {
       properties = { tag = " float " }
     },
     { rule = { instance = "LINE.exe" },
+      properties = { tag = " comm " }
+    },
+    { rule = { instance = "discord" },
       properties = { tag = " comm " }
     },
     { rule = { class = "Steam" },
@@ -609,18 +641,23 @@ end
 
 -- auto start programs
 run_once("fcitx")
-run_once("slack")
 run_once("zeal")
-run_once("albert")
+run_once("nm-applet")
+run_once("compton -b -C -f --xrender-sync --xrender-sync-fence")
+-- albert
+awful.util.spawn_with_shell("sed -i -e 's/displayShadow=.*/displayShadow=false/g' /home/inab/.config/albert/albert.conf")
+run_once("QT_SCALE_FACTOR=1 albert")
+-- inputs
 run_once("xmodmap /home/inab/.Xmodmap")
+run_once("xinput disable 11")
+awful.util.spawn_with_shell("xinput set-prop 'TPPS/2 IBM TrackPoint' 'libinput Accel Speed' -0.880")
+awful.util.spawn_with_shell("xset b off")
+-- screensaver
 run_once("xscreensaver -no-splash")
 run_once("xss-lock -- xscreensaver-command -lock")
-run_once("synclient TouchpadOff=1")
-run_once("shutter")
-run_once("volumeicon")
-run_once("steam-native -silent")
-run_once("blueman-applet")
-awful.util.spawn_with_shell("xset b off")
+-- communication
+run_once("discord")
+run_once("slack")
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
